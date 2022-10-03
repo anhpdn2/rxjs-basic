@@ -2,8 +2,17 @@ import './style.css';
 console.clear();
 
 // begin lesson code
-import { fromEvent, interval } from 'rxjs';
-import { map, scan, mapTo, filter, tap } from 'rxjs/operators';
+import { fromEvent, interval, of } from 'rxjs';
+import {
+  map,
+  scan,
+  mapTo,
+  filter,
+  tap,
+  first,
+  takeWhile,
+  takeUntil,
+} from 'rxjs/operators';
 
 // elem refs
 
@@ -14,13 +23,9 @@ const mess = document.getElementById('message');
 
 const counter$ = interval(1000);
 const codeElem = document.getElementById('code');
-const keyup$ = fromEvent(document, 'keyup');
-// const keycode$ = keyup$.pipe(
-//   map((event) => event.code),
-//   tap((code) => {
-//     codeElem.innerHTML = code;
-//   })
-// );
+const keyup$ = fromEvent(document, 'click');
+const clickAbort$ = fromEvent(document.getElementById('takeuntil'), 'click');
+const keycode$ = counter$.pipe(takeUntil(clickAbort$)).subscribe(console.log);
 
 counter$
   .pipe(
